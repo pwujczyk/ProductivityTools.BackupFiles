@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductivityTools.BackupFiles", "ProductivityTools.BackupFiles\ProductivityTools.BackupFiles.csproj", "{B671C503-14C5-4C16-83ED-91E70DB28C82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductivityTools.BackupFiles.Logic", "ProductivityTools.BackupFiles.Logic\ProductivityTools.BackupFiles.Logic.csproj", "{660E8591-C194-46B6-9B04-3BACAEBDBAB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B671C503-14C5-4C16-83ED-91E70DB28C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B671C503-14C5-4C16-83ED-91E70DB28C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B671C503-14C5-4C16-83ED-91E70DB28C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B671C503-14C5-4C16-83ED-91E70DB28C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{660E8591-C194-46B6-9B04-3BACAEBDBAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{660E8591-C194-46B6-9B04-3BACAEBDBAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{660E8591-C194-46B6-9B04-3BACAEBDBAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{660E8591-C194-46B6-9B04-3BACAEBDBAB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {844179FD-38C6-43D2-9C61-74F6272F6DFE}
+	EndGlobalSection
+EndGlobal
