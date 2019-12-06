@@ -10,60 +10,101 @@ namespace ProductivityTools.BackupFiles.Logic
 {
     public class Backup
     {
-        private void GetDirectories(string directory)
+        private readonly string MasterSourcePath;
+        private readonly string MasterDestinationPath;
+        ActionList ActionList = new ActionList();
+
+        public Backup(string masterSourcePath, string masterDestinationPath)
+        {
+            this.MasterSourcePath = masterSourcePath;
+            this.MasterDestinationPath = masterDestinationPath;
+        }
+
+        public void FindBackupDirectories()
+        {
+            FindBackupDirectories(this.MasterSourcePath, 0);
+        }
+
+        public void FindBackupDirectories(string directory, int depth)
+        {
+            if (depth < 4)
+            {
+                Console.WriteLine($"Looking for powershellconfig in {directory}");
+            }
+            if (directory.StartsWith(this.MasterDestinationPath,StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            if (Access(directory))
+            {
+                if (GetFile(directory))
+                {
+                    ActionList.Add(directory, ProcessFilesInDirectory);
+                    ProcessDirectory(directory, depth);
+                }
+                else
+                {
+                    if (ActionList.Contains(directory))
+                    {
+                        ProcessFilesInDirectory(directory);
+                    }
+                    GetDirectories(directory, depth);
+                }
+            }
+        }
+
+        private void ProcessDirectory(string directory, int depth)
+        {
+            ActionList.InvokeForPath(directory);
+            GetDirectories(directory, depth);
+        }
+
+        private void ProcessFilesInDirectory(string directory)
+        {
+            Console.WriteLine($"Processing directory {directory}");
+            string[] filePaths = Directory.GetFiles(directory);
+            string endPath = directory.Substring(this.MasterSourcePath.Length);
+            var destination = Path.Combine(this.MasterDestinationPath, endPath);
+            if (endPath.Length > 0)
+            {
+                Directory.CreateDirectory(destination);
+            }
+            foreach (var file in filePaths)
+            {
+                FileInfo f = new FileInfo(file);
+                var fileDestination = Path.Combine(destination, f.Name);
+                //Console.WriteLine($"Copying file from {file} to {fileDestination}");
+                File.Copy(file, fileDestination);
+            }
+        }
+
+        private void GetDirectories(string directory, int depth)
         {
             string[] filePaths = Directory.GetDirectories(directory, "*", SearchOption.TopDirectoryOnly);
             foreach (var filePath in filePaths)
             {
-                FindBackupDirectories(filePath);
+                FindBackupDirectories(filePath, depth + 1);
             }
         }
 
-        private void GetFile(string directory)
+        private bool GetFile(string directory)
         {
-            var x=Directory.GetFiles(directory, ".powershell", SearchOption.TopDirectoryOnly);
-            foreach(var xxx in x)
+            var x = Directory.GetFiles(directory, ".powershell", SearchOption.TopDirectoryOnly);
+            foreach (var xxx in x)
             {
                 Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" + xxx);
             }
-        }
-
-        public void FindBackupDirectories(string directory)
-        {
-            // Console.WriteLine(directory);
-
-
-            
-            //System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(directory);
-            //if ((di.Attributes & FileAttributes.System) == FileAttributes.System
-            //    && di.FullName != di.Root.FullName
-            //    )
-            //{
-            //     return;
-            //}
-            if (Access(directory))
+            if (x.Count() > 0)
             {
-                GetDirectories(directory);
-                GetFile(directory);
+                return true;
             }
-            //var x2 = di.GetAccessControl(AccessControlSections.Access);
-            //System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(directory);
-
-
-
-            //var collection = ds.GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount));
-            //foreach (FileSystemAccessRule rule in collection)
-            //{
-            //    if (rule.AccessControlType == AccessControlType.Allow)
-            //    {
-                    
-            //        break;
-            //    }
-            //}
-
-
-
+            else
+            {
+                return false;
+            }
         }
+
 
         private bool Access(string directory)
         {
