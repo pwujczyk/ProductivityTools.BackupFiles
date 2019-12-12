@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackupFilesCmdlet.cs" />
+    <Compile Include="NewBackupFileCmdlet.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProductivityTools.BackupFiles.Logic\ProductivityTools.BackupFiles.Logic.csproj">

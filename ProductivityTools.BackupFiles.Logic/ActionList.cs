@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductivityTools.BackupFiles.Logic.Actions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace ProductivityTools.BackupFiles.Logic
 {
     class ActionList
     {
-        private Dictionary<string, Action<string>> CurrentWork = new Dictionary<string, Action<string>>();
+        private Dictionary<string, BaseAction> CurrentWork = new Dictionary<string, BaseAction>();
 
-        public void Add(string key, Action<string> a)
+        public void Add(string key, BaseAction a)
         {
             this.CurrentWork.Add(key, a);
         }
@@ -27,15 +28,18 @@ namespace ProductivityTools.BackupFiles.Logic
             return false;
         }
 
-        public void InvokeForPath(string path)
+        public void InvokeForPath(string masterSourcePath, string masterDestinationPath, string directory)
         {
-            foreach (var item in this.CurrentWork)
+            var workOrdered= this.CurrentWork.OrderBy(x => x.Key.Length);
+            foreach (var item in workOrdered)
             {
-                if (path.StartsWith(item.Key))
+                if (directory.StartsWith(item.Key))
                 {
-                    item.Value.Invoke(path);
+                    item.Value.Process(masterSourcePath,masterDestinationPath,directory);
+                    return;
                 }
             }
         }
     }
 }
+

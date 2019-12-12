@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductivityTools.BackupFiles.Logic.Actions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,57 +26,32 @@ namespace ProductivityTools.BackupFiles.Logic
             FindBackupDirectories(this.MasterSourcePath, 0);
         }
 
-        public void FindBackupDirectories(string directory, int depth)
+        private void FindBackupDirectories(string directory, int depth)
         {
             if (depth < 4)
             {
                 Console.WriteLine($"Looking for powershellconfig in {directory}");
             }
-            if (directory.StartsWith(this.MasterDestinationPath,StringComparison.OrdinalIgnoreCase))
+            if (directory.StartsWith(this.MasterDestinationPath, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
 
             if (Access(directory))
             {
-                if (GetFile(directory))
-                {
-                    ActionList.Add(directory, ProcessFilesInDirectory);
-                    ProcessDirectory(directory, depth);
-                }
-                else
-                {
-                    if (ActionList.Contains(directory))
-                    {
-                        ProcessFilesInDirectory(directory);
-                    }
-                    GetDirectories(directory, depth);
-                }
+                GetFile(directory);
+                ProcessDirectory(directory, depth);
+                GetDirectories(directory, depth);
+                
             }
         }
 
         private void ProcessDirectory(string directory, int depth)
         {
-            ActionList.InvokeForPath(directory);
-            GetDirectories(directory, depth);
-        }
-
-        private void ProcessFilesInDirectory(string directory)
-        {
-            Console.WriteLine($"Processing directory {directory}");
-            string[] filePaths = Directory.GetFiles(directory);
-            string endPath = directory.Substring(this.MasterSourcePath.Length);
-            var destination = Path.Combine(this.MasterDestinationPath, endPath);
-            if (endPath.Length > 0)
+            //pw: move it to invoke
+            if (ActionList.Contains(directory))
             {
-                Directory.CreateDirectory(destination);
-            }
-            foreach (var file in filePaths)
-            {
-                FileInfo f = new FileInfo(file);
-                var fileDestination = Path.Combine(destination, f.Name);
-                //Console.WriteLine($"Copying file from {file} to {fileDestination}");
-                File.Copy(file, fileDestination);
+                ActionList.InvokeForPath(this.MasterSourcePath,this.MasterDestinationPath, directory);        
             }
         }
 
@@ -90,18 +66,23 @@ namespace ProductivityTools.BackupFiles.Logic
 
         private bool GetFile(string directory)
         {
-            var x = Directory.GetFiles(directory, ".powershell", SearchOption.TopDirectoryOnly);
-            foreach (var xxx in x)
+            var x = Directory.GetFiles(directory, ".powershell", SearchOption.TopDirectoryOnly).SingleOrDefault();
+            if (x == null)
             {
-                Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" + xxx);
-            }
-            if (x.Count() > 0)
-            {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                string f = File.ReadAllText(x);
+                if (f.Contains("Copy"))
+                {
+                    ActionList.Add(directory, new CopyFilesRecursive());
+                }
+                if (f.Contains("DoNotCopy"))
+                {
+                    throw new Exception();
+                }
+                return true;
             }
         }
 
