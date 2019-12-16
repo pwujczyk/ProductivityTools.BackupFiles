@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="ActionAttribute.cs" />
     <Compile Include="Actions\.BaseAction.cs" />
+    <Compile Include="Actions\DoNothing.cs" />
     <Compile Include="BackupFile.cs" />
     <Compile Include="BackupMode.cs" />
     <Compile Include="Tools\ActionDescription.cs" />

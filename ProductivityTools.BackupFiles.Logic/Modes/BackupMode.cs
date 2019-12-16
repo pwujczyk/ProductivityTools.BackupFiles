@@ -8,8 +8,9 @@ namespace ProductivityTools.BackupFiles.Logic
 {
     public enum BackupMode
     {
-        DoNotCopy,
-        CopyRecurively,
+        NotDefined,
+        DoNothing,
+        CopyRecursively,
         CopyJustFiles
     }
 }

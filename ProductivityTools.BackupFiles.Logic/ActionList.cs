@@ -11,9 +11,13 @@ namespace ProductivityTools.BackupFiles.Logic
     {
         private Dictionary<string, BaseAction> CurrentWork = new Dictionary<string, BaseAction>();
 
-        public void Add(string key, BaseAction a)
+        public void Add(string key, BackupMode a)
         {
-            this.CurrentWork.Add(key, a);
+            BaseAction baseAction = ReflectionTools.CreateInstanceOfActionFromEnum(a);
+            if (baseAction != null)
+            {
+                this.CurrentWork.Add(key, baseAction);
+            }
         }
 
         public bool Contains(string path)
@@ -30,12 +34,12 @@ namespace ProductivityTools.BackupFiles.Logic
 
         public void InvokeForPath(string masterSourcePath, string masterDestinationPath, string directory)
         {
-            var workOrdered= this.CurrentWork.OrderBy(x => x.Key.Length);
+            var workOrdered = this.CurrentWork.OrderByDescending(x => x.Key.Length);
             foreach (var item in workOrdered)
             {
                 if (directory.StartsWith(item.Key))
                 {
-                    item.Value.Process(masterSourcePath,masterDestinationPath,directory);
+                    item.Value.Process(masterSourcePath, masterDestinationPath, directory);
                     return;
                 }
             }

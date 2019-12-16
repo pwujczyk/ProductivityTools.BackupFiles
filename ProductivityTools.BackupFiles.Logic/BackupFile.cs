@@ -2,6 +2,7 @@
 using ProductivityTools.BackupFiles.Logic.Tools;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,20 +15,25 @@ namespace ProductivityTools.BackupFiles.Logic
     {
         private const string FileName = ".Backup";
 
-        public void CreateBackupFile()
+        public object Direct { get; private set; }
+        private string NodeNameBackup = "Backup";
+        private string NodeNameMode = "Mode";
+        private string NodeCopyStrategy = "CopyStrategy";
+
+        public void CreateBackupFile(string directory)
         {
-            Create();
+            Create(directory);
         }
 
-        private void Create()
+        private void Create(string directory)
         {
-            IEnumerable<Attribute> attribs=ActionDescription.GetActionAttribute();
+            IEnumerable<Attribute> attribs = ActionDescription.GetActionAttribute();
 
             var document = new XDocument();
-            var mainNode = new XElement("Backup");
+            var mainNode = new XElement(NodeNameBackup);
             document.Add(mainNode);
 
-            var modeElement = new XElement("Mode", "notDefined");
+            var modeElement = new XElement(NodeNameMode, "notDefined");
             mainNode.Add(modeElement);
 
             var comment = new XComment("Mode defines how copying files is performed. Possible options:");
@@ -35,11 +41,39 @@ namespace ProductivityTools.BackupFiles.Logic
 
             foreach (ActionAttribute item in attribs)
             {
-                comment=new XComment($"{item.BackupMode} - {item.Description}");
+                comment = new XComment($"{item.BackupMode} - {item.Description}");
                 mainNode.Add(comment);
             }
 
-            document.Save(FileName);
+            var copyStrategyElement = new XElement(NodeCopyStrategy, "notDefined");
+            mainNode.Add(modeElement);
+
+
+            string targetFile = Path.Combine(directory, FileName);
+            document.Save(targetFile);
         }
+
+        public BackupMode GetBackupMode(string directory)
+        {
+            var x = Directory.GetFiles(directory, FileName, SearchOption.TopDirectoryOnly).SingleOrDefault();
+            if (x == null)
+            {
+                return BackupMode.NotDefined;
+            }
+            else
+            {
+
+                XDocument xdoc = XDocument.Load(x);
+                string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
+                                     select mode.Value).SingleOrDefault();
+                if (string.IsNullOrEmpty(backupMode))
+                {
+                    return BackupMode.NotDefined;
+                }
+                BackupMode modeEnum = (BackupMode)Enum.Parse(typeof(BackupMode), backupMode);
+                return modeEnum;
+            }
+        }
+
     }
 }

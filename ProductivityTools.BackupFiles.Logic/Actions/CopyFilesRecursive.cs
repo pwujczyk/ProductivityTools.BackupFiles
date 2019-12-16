@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic.Actions
 {
-    [Action(BackupMode.CopyRecurively,"It will copy files and directories recursively, until it will find another file which will override action")]
+    [Action(BackupMode.CopyRecursively,"It will copy files and directories recursively, until it will find another file which will override action")]
     class CopyFilesRecursive : BaseAction
     {
         public override void Process(string masterSourcePath, string masterDestinationPath, string directory)

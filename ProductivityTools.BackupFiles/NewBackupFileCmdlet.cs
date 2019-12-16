@@ -17,7 +17,8 @@ namespace ProductivityTools.BackupFiles
 
         protected override void ProcessRecord()
         {
-            new BackupFile().CreateBackupFile("FdSA");
+            string path = CurrentProviderLocation("FileSystem").ProviderPath;
+            new BackupFile().CreateBackupFile(path);
             base.ProcessRecord();
 
         }

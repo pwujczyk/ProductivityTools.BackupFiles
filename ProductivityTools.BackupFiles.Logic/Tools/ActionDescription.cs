@@ -14,7 +14,7 @@ namespace ProductivityTools.BackupFiles.Logic.Tools
         {
             List<ActionAttribute> result = new List<ActionAttribute>();
 
-            IEnumerable<Type> actions = ReflectiveEnumerator.GetEnumerableOfType<BaseAction>();
+            IEnumerable<Type> actions = GetEnumerableOfType<BaseAction>();
             foreach (Type type in actions)
             {
                 var attribute = GetActionAttribute(type);
@@ -26,7 +26,7 @@ namespace ProductivityTools.BackupFiles.Logic.Tools
             return result;
         }
 
-        private static ActionAttribute GetActionAttribute(Type t)
+        public static ActionAttribute GetActionAttribute(Type t)
         {
             var dnAttribute = t.GetCustomAttributes(typeof(ActionAttribute), true).FirstOrDefault() as ActionAttribute;
             if (dnAttribute != null)

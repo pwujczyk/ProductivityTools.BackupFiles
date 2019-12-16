@@ -14,6 +14,7 @@ namespace ProductivityTools.BackupFiles.Logic
         private readonly string MasterSourcePath;
         private readonly string MasterDestinationPath;
         ActionList ActionList = new ActionList();
+        BackupFile BackupFile = new BackupFile();
 
         public Backup(string masterSourcePath, string masterDestinationPath)
         {
@@ -39,10 +40,15 @@ namespace ProductivityTools.BackupFiles.Logic
 
             if (Access(directory))
             {
-                GetFile(directory);
+
+                var mode = BackupFile.GetBackupMode(directory);
+                if (mode != BackupMode.NotDefined)
+                {
+                    ActionList.Add(directory, mode);
+                }
                 ProcessDirectory(directory, depth);
                 GetDirectories(directory, depth);
-                
+
             }
         }
 
@@ -51,9 +57,9 @@ namespace ProductivityTools.BackupFiles.Logic
             //pw: move it to invoke
             if (ActionList.Contains(directory))
             {
-                ActionList.InvokeForPath(this.MasterSourcePath,this.MasterDestinationPath, directory);        
+                ActionList.InvokeForPath(this.MasterSourcePath, this.MasterDestinationPath, directory);
             }
-        }
+         }
 
         private void GetDirectories(string directory, int depth)
         {
@@ -61,28 +67,6 @@ namespace ProductivityTools.BackupFiles.Logic
             foreach (var filePath in filePaths)
             {
                 FindBackupDirectories(filePath, depth + 1);
-            }
-        }
-
-        private bool GetFile(string directory)
-        {
-            var x = Directory.GetFiles(directory, ".powershell", SearchOption.TopDirectoryOnly).SingleOrDefault();
-            if (x == null)
-            {
-                return false;
-            }
-            else
-            {
-                string f = File.ReadAllText(x);
-                if (f.Contains("Copy"))
-                {
-                    ActionList.Add(directory, new CopyFilesRecursive());
-                }
-                if (f.Contains("DoNotCopy"))
-                {
-                    throw new Exception();
-                }
-                return true;
             }
         }
 
