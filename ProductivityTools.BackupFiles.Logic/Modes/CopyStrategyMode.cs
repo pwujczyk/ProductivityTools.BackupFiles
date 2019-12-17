@@ -10,10 +10,8 @@ namespace ProductivityTools.BackupFiles.Logic.Modes
     {
         NotDefined,
         OverrideAlways,
-        OvverideIfModyficationDateIsNewer
+        OvverideIfModyficationDateIsNewer,
         BreakWhenFound,
         Omit,
-        
-    
     }
 }

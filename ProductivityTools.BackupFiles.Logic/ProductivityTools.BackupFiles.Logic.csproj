@@ -36,11 +36,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ActionAttribute.cs" />
+    <Compile Include="Actions\ActionAttribute.cs" />
     <Compile Include="Actions\.BaseAction.cs" />
     <Compile Include="Actions\DoNothing.cs" />
     <Compile Include="BackupFile.cs" />
-    <Compile Include="BackupMode.cs" />
+    <Compile Include="CopyStrategy\CopyAttribute.cs" />
+    <Compile Include="CopyStrategy\OverrideAlways.cs" />
+    <Compile Include="Modes\BackupMode.cs" />
+    <Compile Include="Modes\CopyStrategyMode.cs" />
     <Compile Include="Tools\ActionDescription.cs" />
     <Compile Include="Tools\ReflectionTools.cs" />
     <None Include="App.config" />
@@ -56,5 +59,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
