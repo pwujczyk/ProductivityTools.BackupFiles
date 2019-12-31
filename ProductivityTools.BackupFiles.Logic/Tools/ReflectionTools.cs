@@ -1,4 +1,5 @@
 ﻿using ProductivityTools.BackupFiles.Logic.Actions;
+using ProductivityTools.BackupFiles.Logic.CopyStrategy;
 using ProductivityTools.BackupFiles.Logic.Tools;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace ProductivityTools.BackupFiles.Logic
             return objects;
         }
 
-        public static BaseAction CreateInstanceOfActionFromEnum(BackupMode mode)
+        public static BaseAction CreateInstanceOfActionFromEnum(BackupMode mode, CopyStrategyBase copyStrategy)
         {
             IEnumerable<Type> actions = GetEnumerableOfType<BaseAction>();
             foreach (Type type in actions)
@@ -33,7 +34,7 @@ namespace ProductivityTools.BackupFiles.Logic
                 {
                     if (attribute.BackupMode == mode)
                     {
-                        var action = (BaseAction)Activator.CreateInstance(type);
+                        var action = (BaseAction)Activator.CreateInstance(type, copyStrategy);
                         return action;
                     }
                 }

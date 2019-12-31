@@ -62,7 +62,6 @@ namespace ProductivityTools.BackupFiles.Logic
             }
             else
             {
-
                 XDocument xdoc = XDocument.Load(x);
                 string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
                                      select mode.Value).SingleOrDefault();
@@ -74,6 +73,5 @@ namespace ProductivityTools.BackupFiles.Logic
                 return modeEnum;
             }
         }
-
     }
 }

@@ -10,6 +10,8 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
     [Action(BackupMode.DoNothing,"It will omit directory during backup process")]
     class DoNothing : BaseAction
     {
+        public DoNothing() : base(null) { }
+
         public override void Process(string masterSourcePath, string masterDestinationPath, string directory)
         {
             ProcessFilesInDirectory(masterSourcePath, masterDestinationPath, directory);

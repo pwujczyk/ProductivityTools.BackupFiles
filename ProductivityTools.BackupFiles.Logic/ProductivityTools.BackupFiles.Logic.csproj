@@ -42,11 +42,13 @@
     <Compile Include="BackupFile.cs" />
     <Compile Include="CopyStrategy\CopyAttribute.cs" />
     <Compile Include="CopyStrategy\OverrideAlways.cs" />
+    <Compile Include="CopyStrategy\OverrideIfNewer.cs" />
     <Compile Include="Modes\BackupMode.cs" />
     <Compile Include="Modes\CopyStrategyMode.cs" />
     <Compile Include="Tools\ActionDescription.cs" />
     <Compile Include="Tools\ReflectionTools.cs" />
     <None Include="App.config" />
+    <Compile Include="CopyStrategy\.CopyStrategyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionList.cs" />
