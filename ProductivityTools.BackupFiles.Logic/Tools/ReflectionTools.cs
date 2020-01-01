@@ -3,6 +3,7 @@ using ProductivityTools.BackupFiles.Logic.CopyStrategy;
 using ProductivityTools.BackupFiles.Logic.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -40,6 +41,20 @@ namespace ProductivityTools.BackupFiles.Logic
                 }
             }
             return null;
+        }
+
+        public static string GetEnumDescription<T>(T value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DescriptionAttribute[] attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+
+            if (attributes != null && attributes.Any())
+            {
+                return attributes.First().Description;
+            }
+
+            return value.ToString();
         }
     }
 }

@@ -9,12 +9,10 @@ namespace ProductivityTools.BackupFiles.Logic
     public class ActionAttribute : Attribute
     {
         public BackupMode BackupMode { get; set; }
-        public string Description { get; set; }
 
-        public ActionAttribute(BackupMode backupMode, string description)
+        public ActionAttribute(BackupMode backupMode)
         {
             this.BackupMode = backupMode;
-            this.Description = description;
         }
     }
 }

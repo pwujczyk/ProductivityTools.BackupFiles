@@ -2,6 +2,7 @@
 using ProductivityTools.BackupFiles.Logic.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,12 @@ namespace ProductivityTools.BackupFiles.Logic
 
         private void Create(string directory)
         {
+            var properties=typeof(BackupConfig).GetProperties();
+            foreach(var property in properties)
+            {
+               var s= ReflectionTools.GetEnumDescription(property);
+            }
+
             IEnumerable<Attribute> attribs = ActionDescription.GetActionAttribute();
 
             var document = new XDocument();
@@ -41,7 +48,7 @@ namespace ProductivityTools.BackupFiles.Logic
 
             foreach (ActionAttribute item in attribs)
             {
-                comment = new XComment($"{item.BackupMode} - {item.Description}");
+               // comment = new XComment($"{item.BackupMode} - {item.Description}");
                 mainNode.Add(comment);
             }
 
