@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic
 {
+    [Description("It will decide how copying operation should be performed")]
     public enum BackupMode
     {
         NotDefined,

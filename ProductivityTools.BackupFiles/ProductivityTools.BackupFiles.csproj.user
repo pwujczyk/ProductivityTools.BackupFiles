@@ -3,6 +3,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
     <StartProgram>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</StartProgram>
-    <StartArguments>-noexit -command "import-module D:\GitHub\ProductivityTools.BackupFiles\ProductivityTools.BackupFiles\bin\Debug\ProductivityTools.BackupFiles.dll"</StartArguments>
+    <StartArguments>-noexit -command "import-module D:\GitHub\ProductivityTools.PSBackupFiles\ProductivityTools.BackupFiles\bin\Debug\ProductivityTools.BackupFiles.dll"</StartArguments>
   </PropertyGroup>
 </Project>

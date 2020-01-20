@@ -41,10 +41,10 @@ namespace ProductivityTools.BackupFiles.Logic
             if (Access(directory))
             {
 
-                var mode = BackupFile.GetBackupMode(directory);
-                if (mode != BackupMode.NotDefined)
+                var config = BackupFile.GetBackupConfig(directory);
+                if (config != null)
                 {
-                    ActionList.Add(directory, mode);
+                    ActionList.Add(directory, config);
                 }
                 ProcessDirectory(directory, depth);
                 GetDirectories(directory, depth);
@@ -59,7 +59,7 @@ namespace ProductivityTools.BackupFiles.Logic
             {
                 ActionList.InvokeForPath(this.MasterSourcePath, this.MasterDestinationPath, directory);
             }
-         }
+        }
 
         private void GetDirectories(string directory, int depth)
         {

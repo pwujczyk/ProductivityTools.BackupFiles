@@ -1,4 +1,5 @@
 ﻿using ProductivityTools.BackupFiles.Logic.Actions;
+using ProductivityTools.BackupFiles.Logic.CopyStrategy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace ProductivityTools.BackupFiles.Logic
     {
         private Dictionary<string, BaseAction> CurrentWork = new Dictionary<string, BaseAction>();
 
-        public void Add(string key, BackupMode a)
+        public void Add(string key, BackupConfig copyStrategy)
         {
-            BaseAction baseAction = ReflectionTools.CreateInstanceOfActionFromEnum(a);
+            BaseAction baseAction = ReflectionTools.CreateInstanceOfActionFromEnum(copyStrategy);
             if (baseAction != null)
             {
                 this.CurrentWork.Add(key, baseAction);

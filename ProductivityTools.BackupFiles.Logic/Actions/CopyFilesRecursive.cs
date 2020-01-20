@@ -35,10 +35,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
                 var fileDestination = Path.Combine(destination, f.Name);
                 //Console.WriteLine($"Copying file from {file} to {fileDestination}");
                 copyStrategyBase.Copy(file, fileDestination);
-                
             }
         }
-
-
     }
 }

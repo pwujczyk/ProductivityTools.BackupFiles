@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic
 {
-    class ReflectionTools
+    static class ReflectionTools
     {
         public static IEnumerable<Type> GetEnumerableOfType<T>() where T : class
         {
@@ -25,7 +25,7 @@ namespace ProductivityTools.BackupFiles.Logic
             return objects;
         }
 
-        public static BaseAction CreateInstanceOfActionFromEnum(BackupMode mode, CopyStrategyBase copyStrategy)
+        public static BaseAction CreateInstanceOfActionFromEnum(BackupConfig backupConfig)
         {
             IEnumerable<Type> actions = GetEnumerableOfType<BaseAction>();
             foreach (Type type in actions)
@@ -33,9 +33,9 @@ namespace ProductivityTools.BackupFiles.Logic
                 var attribute = ActionDescription.GetActionAttribute(type);
                 if (attribute != null)
                 {
-                    if (attribute.BackupMode == mode)
+                    if (attribute.BackupMode == backupConfig.Mode)
                     {
-                        var action = (BaseAction)Activator.CreateInstance(type, copyStrategy);
+                        var action = (BaseAction)Activator.CreateInstance(type, backupConfig.Mode);
                         return action;
                     }
                 }
@@ -55,6 +55,12 @@ namespace ProductivityTools.BackupFiles.Logic
             }
 
             return value.ToString();
+        }
+
+        public static string GetPropertyDescription(this PropertyInfo that)
+        {
+            var x=that.PropertyType.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+            return x[0].Description;
         }
     }
 }

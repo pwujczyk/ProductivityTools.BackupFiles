@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic.Actions
 {
-    [Action(BackupMode.DoNothing,"It will omit directory during backup process")]
+    [Action(BackupMode.DoNothing)]
     class DoNothing : BaseAction
     {
         public DoNothing() : base(null) { }
