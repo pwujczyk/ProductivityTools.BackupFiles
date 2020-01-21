@@ -40,7 +40,6 @@ namespace ProductivityTools.BackupFiles.Logic
 
             if (Access(directory))
             {
-
                 var config = BackupFile.GetBackupConfig(directory);
                 if (config != null)
                 {
@@ -48,7 +47,6 @@ namespace ProductivityTools.BackupFiles.Logic
                 }
                 ProcessDirectory(directory, depth);
                 GetDirectories(directory, depth);
-
             }
         }
 
@@ -70,7 +68,6 @@ namespace ProductivityTools.BackupFiles.Logic
             }
         }
 
-
         private bool Access(string directory)
         {
             try
@@ -79,7 +76,6 @@ namespace ProductivityTools.BackupFiles.Logic
             }
             catch (Exception)
             {
-
                 return false;
             }
             return true;

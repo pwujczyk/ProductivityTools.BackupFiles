@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic.CopyStrategy
 {
-    class OverrideIfNewer: CopyStrategyBase
+    class OverrideIfNewer : CopyStrategyBase
     {
         public override void Copy(string source, string destination)
         {
@@ -15,9 +15,9 @@ namespace ProductivityTools.BackupFiles.Logic.CopyStrategy
             {
                 FileInfo fileinfoSource = new FileInfo(source);
                 FileInfo fileinfodestination = new FileInfo(destination);
-                if (fileinfoSource.LastWriteTimeUtc>fileinfodestination.LastWriteTimeUtc)
+                if (fileinfoSource.LastWriteTimeUtc > fileinfodestination.LastWriteTimeUtc)
                 {
-                    File.Copy(source, destination);
+                    File.Copy(source, destination, true);
                 }
             }
             else

@@ -41,6 +41,7 @@
     <Compile Include="Actions\DoNothing.cs" />
     <Compile Include="BackupConfig.cs" />
     <Compile Include="BackupFile.cs" />
+    <Compile Include="BackupWorker.cs" />
     <Compile Include="CopyStrategy\CopyAttribute.cs" />
     <Compile Include="CopyStrategy\OverrideAlways.cs" />
     <Compile Include="CopyStrategy\OverrideIfNewer.cs" />

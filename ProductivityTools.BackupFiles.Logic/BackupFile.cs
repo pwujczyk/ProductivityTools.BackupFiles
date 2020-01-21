@@ -57,30 +57,46 @@ namespace ProductivityTools.BackupFiles.Logic
             IEnumerable<Attribute> attribs = ActionDescription.GetActionAttribute();
         }
 
-        public BackupMode GetBackupMode(string directory)
+        //public BackupMode GetBackupMode(string directory)
+        //{
+        //    var x = Directory.GetFiles(directory, FileName, SearchOption.TopDirectoryOnly).SingleOrDefault();
+        //    if (x == null)
+        //    {
+        //        return BackupMode.NotDefined;
+        //    }
+        //    else
+        //    {
+        //        XDocument xdoc = XDocument.Load(x);
+        //        string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
+        //                             select mode.Value).SingleOrDefault();
+        //        if (string.IsNullOrEmpty(backupMode))
+        //        {
+        //            return BackupMode.NotDefined;
+        //        }
+        //        BackupMode modeEnum = (BackupMode)Enum.Parse(typeof(BackupMode), backupMode);
+        //        return modeEnum;
+        //    }
+        //}
+
+        public BackupConfig GetBackupConfig(string directory)
         {
+            var result = new BackupConfig();
             var x = Directory.GetFiles(directory, FileName, SearchOption.TopDirectoryOnly).SingleOrDefault();
             if (x == null)
             {
-                return BackupMode.NotDefined;
+                return null;
             }
             else
             {
                 XDocument xdoc = XDocument.Load(x);
                 string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
                                      select mode.Value).SingleOrDefault();
-                if (string.IsNullOrEmpty(backupMode))
+                if (!string.IsNullOrEmpty(backupMode))
                 {
-                    return BackupMode.NotDefined;
+                    result.Mode= (BackupMode)Enum.Parse(typeof(BackupMode), backupMode);
                 }
-                BackupMode modeEnum = (BackupMode)Enum.Parse(typeof(BackupMode), backupMode);
-                return modeEnum;
             }
-        }
-
-        public BackupConfig GetBackupConfig(string directory)
-        {
-            return new BackupConfig();
+            return result;
         }
     }
 }

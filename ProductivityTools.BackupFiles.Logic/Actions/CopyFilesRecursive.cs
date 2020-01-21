@@ -11,7 +11,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
     [Action(BackupMode.CopyRecursively)]
     class CopyFilesRecursive : BaseAction
     {
-        public CopyFilesRecursive(CopyStrategy.CopyStrategyBase copyStrategyBase) : base(copyStrategyBase)
+        public CopyFilesRecursive() : base()
         { }
 
         public override void Process(string masterSourcePath, string masterDestinationPath, string directory)
@@ -34,7 +34,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
                 FileInfo f = new FileInfo(file);
                 var fileDestination = Path.Combine(destination, f.Name);
                 //Console.WriteLine($"Copying file from {file} to {fileDestination}");
-                copyStrategyBase.Copy(file, fileDestination);
+                copyStrategy.Copy(file, fileDestination);
             }
         }
     }

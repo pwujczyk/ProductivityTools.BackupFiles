@@ -18,7 +18,7 @@ namespace ProductivityTools.BackupFiles
 
         protected override void ProcessRecord()
         {
-            Backup b = new Backup(@"d:\", @"D:\trash\X1");
+            Backup b = new Backup(@"d:\BackupTest\", @"D:\trash\X1");
             b.FindBackupDirectories();
             base.ProcessRecord();
 

@@ -25,7 +25,7 @@ namespace ProductivityTools.BackupFiles.Logic
             return objects;
         }
 
-        public static BaseAction CreateInstanceOfActionFromEnum(BackupConfig backupConfig)
+        public static BaseAction CreateInstanceOfActionFromEnum(BackupMode backupConfig)
         {
             IEnumerable<Type> actions = GetEnumerableOfType<BaseAction>();
             foreach (Type type in actions)
@@ -33,9 +33,9 @@ namespace ProductivityTools.BackupFiles.Logic
                 var attribute = ActionDescription.GetActionAttribute(type);
                 if (attribute != null)
                 {
-                    if (attribute.BackupMode == backupConfig.Mode)
+                    if (attribute.BackupMode == backupConfig)
                     {
-                        var action = (BaseAction)Activator.CreateInstance(type, backupConfig.Mode);
+                        var action = (BaseAction)Activator.CreateInstance(type);
                         return action;
                     }
                 }

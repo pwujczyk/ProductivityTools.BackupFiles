@@ -9,15 +9,18 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
 {
     abstract class BaseAction
     {
-        protected CopyStrategy.CopyStrategyBase copyStrategyBase;
+        protected CopyStrategy.CopyStrategyBase copyStrategy;
 
-        private BaseAction() { }
-
-        public BaseAction(CopyStrategy.CopyStrategyBase copyStrategyBase)
+        public BaseAction()
         {
-            this.copyStrategyBase = copyStrategyBase;
+            
         }
 
         public abstract void Process(string masterSourcePath, string masterDestinationPath, string directory);
+
+        public void SetCopyStrategy(CopyStrategyBase copyStrategy)
+        {
+            this.copyStrategy = copyStrategy;
+        }
     }
 }

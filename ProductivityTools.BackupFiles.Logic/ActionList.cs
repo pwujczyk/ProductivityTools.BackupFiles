@@ -10,15 +10,11 @@ namespace ProductivityTools.BackupFiles.Logic
 {
     class ActionList
     {
-        private Dictionary<string, BaseAction> CurrentWork = new Dictionary<string, BaseAction>();
+        private Dictionary<string, BackupConfig> CurrentWork = new Dictionary<string, BackupConfig>();
 
-        public void Add(string key, BackupConfig copyStrategy)
+        public void Add(string key, BackupConfig backupConfig)
         {
-            BaseAction baseAction = ReflectionTools.CreateInstanceOfActionFromEnum(copyStrategy);
-            if (baseAction != null)
-            {
-                this.CurrentWork.Add(key, baseAction);
-            }
+            this.CurrentWork.Add(key, backupConfig);
         }
 
         public bool Contains(string path)
@@ -40,7 +36,12 @@ namespace ProductivityTools.BackupFiles.Logic
             {
                 if (directory.StartsWith(item.Key))
                 {
-                    item.Value.Process(masterSourcePath, masterDestinationPath, directory);
+                    //improve this
+                    BackupWorker worker = new BackupWorker(masterSourcePath, masterDestinationPath);
+                    worker.Process(directory,item.Value);
+
+
+                    //item.Value.Mode.Process(masterSourcePath, masterDestinationPath, directory);
                     return;
                 }
             }

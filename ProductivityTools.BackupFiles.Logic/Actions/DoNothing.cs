@@ -10,7 +10,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
     [Action(BackupMode.DoNothing)]
     class DoNothing : BaseAction
     {
-        public DoNothing() : base(null) { }
+        public DoNothing() : base() { }
 
         public override void Process(string masterSourcePath, string masterDestinationPath, string directory)
         {
