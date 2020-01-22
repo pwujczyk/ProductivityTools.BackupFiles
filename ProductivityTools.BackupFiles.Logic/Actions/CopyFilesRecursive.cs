@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic.Actions
 {
-    [Action(BackupMode.CopyRecursively)]
+    [Action((int)BackupMode.CopyRecursively)]
     class CopyFilesRecursive : BaseAction
     {
         public CopyFilesRecursive() : base()

@@ -1,4 +1,5 @@
-﻿using ProductivityTools.BackupFiles.Logic.Tools;
+﻿using ProductivityTools.BackupFiles.Logic.Modes;
+using ProductivityTools.BackupFiles.Logic.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ namespace ProductivityTools.BackupFiles.Logic
         public object Direct { get; private set; }
         private string NodeNameBackup = "Backup";
         private string NodeNameMode = "Mode";
+        private string NodeNameCopyStrategy = "CopyStrategy";
 
         public void CreateBackupFile(string directory)
         {
@@ -78,6 +80,18 @@ namespace ProductivityTools.BackupFiles.Logic
         //    }
         //}
 
+        private T ParseEnum<T>(XDocument xdoc, string nodeName) 
+        {
+            T result = default(T);
+            string backupMode = (from mode in xdoc.Descendants(nodeName)
+                                 select mode.Value).SingleOrDefault();
+            if (!string.IsNullOrEmpty(backupMode))
+            {
+                result = (T)Enum.Parse(typeof(T), backupMode);
+            }
+            return result;
+        }
+
         public BackupConfig GetBackupConfig(string directory)
         {
             var result = new BackupConfig();
@@ -89,12 +103,17 @@ namespace ProductivityTools.BackupFiles.Logic
             else
             {
                 XDocument xdoc = XDocument.Load(x);
-                string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
-                                     select mode.Value).SingleOrDefault();
-                if (!string.IsNullOrEmpty(backupMode))
-                {
-                    result.Mode= (BackupMode)Enum.Parse(typeof(BackupMode), backupMode);
-                }
+                var mode=ParseEnum<BackupMode>(xdoc, NodeNameMode);
+                var copyStrategy = ParseEnum<CopyStrategyMode>(xdoc, NodeNameCopyStrategy);
+                result.Mode = mode;
+                result.CopyStrategy = copyStrategy;
+
+                //string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
+                //                     select mode.Value).SingleOrDefault();
+                //if (!string.IsNullOrEmpty(backupMode))
+                //{
+                //    result.Mode = (BackupMode)Enum.Parse(typeof(BackupMode), backupMode);
+                //}
             }
             return result;
         }

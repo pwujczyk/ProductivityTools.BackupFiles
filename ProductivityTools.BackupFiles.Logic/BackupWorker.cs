@@ -20,9 +20,10 @@ namespace ProductivityTools.BackupFiles.Logic
 
         public void Process(string processingDirectory, BackupConfig config)
         {
-            var x=ReflectionTools.CreateInstanceOfActionFromEnum(config.Mode);
-            x.SetCopyStrategy(new OverrideIfNewer());
-            x.Process(this.MasterSourcePath, this.MasterDestPath, processingDirectory);
+            var backupMode=ReflectionTools.CreateInstanceOfActionFromEnum((int)config.Mode);
+            var copyStrategyMode = ReflectionTools.CreateInstanceOfActionFromEnum<CopyStrategyBase>((int)config.CopyStrategy);
+            backupMode.SetCopyStrategy(copyStrategyMode);
+            backupMode.Process(this.MasterSourcePath, this.MasterDestPath, processingDirectory);
         }
     }
 }

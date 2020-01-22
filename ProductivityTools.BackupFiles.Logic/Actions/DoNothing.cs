@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic.Actions
 {
-    [Action(BackupMode.DoNothing)]
+    [Action((int)BackupMode.DoNothing)]
     class DoNothing : BaseAction
     {
         public DoNothing() : base() { }

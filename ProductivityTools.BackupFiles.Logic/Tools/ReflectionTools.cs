@@ -25,7 +25,7 @@ namespace ProductivityTools.BackupFiles.Logic
             return objects;
         }
 
-        public static BaseAction CreateInstanceOfActionFromEnum(BackupMode backupConfig)
+        public static BaseAction CreateInstanceOfActionFromEnum(int backupConfig)
         {
             IEnumerable<Type> actions = GetEnumerableOfType<BaseAction>();
             foreach (Type type in actions)
@@ -36,6 +36,24 @@ namespace ProductivityTools.BackupFiles.Logic
                     if (attribute.BackupMode == backupConfig)
                     {
                         var action = (BaseAction)Activator.CreateInstance(type);
+                        return action;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static T CreateInstanceOfActionFromEnum<T>(int backupConfig) where T : class
+        {
+            IEnumerable<Type> actions = GetEnumerableOfType<T>();
+            foreach (Type type in actions)
+            {
+                var attribute = ActionDescription.GetActionAttribute(type);
+                if (attribute != null)
+                {
+                    if (attribute.BackupMode == backupConfig)
+                    {
+                        var action = (T)Activator.CreateInstance(type);
                         return action;
                     }
                 }
@@ -59,7 +77,7 @@ namespace ProductivityTools.BackupFiles.Logic
 
         public static string GetPropertyDescription(this PropertyInfo that)
         {
-            var x=that.PropertyType.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+            var x = that.PropertyType.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
             return x[0].Description;
         }
     }

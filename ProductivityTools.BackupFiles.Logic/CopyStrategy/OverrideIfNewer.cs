@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductivityTools.BackupFiles.Logic.Modes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic.CopyStrategy
 {
+    [Action((int)CopyStrategyMode.OvverideIfModyficationDateIsNewer)]
     class OverrideIfNewer : CopyStrategyBase
     {
         public override void Copy(string source, string destination)
