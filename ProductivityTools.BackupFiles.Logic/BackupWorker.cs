@@ -1,4 +1,5 @@
-﻿using ProductivityTools.BackupFiles.Logic.CopyStrategy;
+﻿using ProductivityTools.BackupFiles.Logic.Actions.RedundantItems;
+using ProductivityTools.BackupFiles.Logic.CopyStrategy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,12 @@ namespace ProductivityTools.BackupFiles.Logic
             var backupMode=ReflectionTools.CreateInstanceOfActionFromEnum((int)config.Mode);
             var copyStrategyMode = ReflectionTools.CreateInstanceOfActionFromEnum<CopyStrategyBase>((int)config.CopyStrategy);
             backupMode.SetCopyStrategy(copyStrategyMode);
+            var redundantMode= ReflectionTools.CreateInstanceOfActionFromEnum<RedundantItemsBase>((int)config.RedundantItems);
+            backupMode.SetRedundantItemsMode(new Remove());
             backupMode.Process(this.MasterSourcePath, this.MasterDestPath, processingDirectory);
         }
     }
+
+
+   
 }

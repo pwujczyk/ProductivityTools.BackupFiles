@@ -36,27 +36,30 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Actions\ActionAttribute.cs" />
-    <Compile Include="Actions\.BaseAction.cs" />
-    <Compile Include="Actions\DoNothing.cs" />
+    <Compile Include="Actions\BackupProcessing\ActionAttribute.cs" />
+    <Compile Include="Actions\BackupProcessing\.BaseAction.cs" />
+    <Compile Include="Actions\BackupProcessing\DoNothing.cs" />
+    <Compile Include="Actions\RedundantItems\Remove.cs" />
     <Compile Include="BackupConfig.cs" />
     <Compile Include="BackupFile.cs" />
     <Compile Include="BackupWorker.cs" />
-    <Compile Include="CopyStrategy\CopyAttribute.cs" />
-    <Compile Include="CopyStrategy\OverrideAlways.cs" />
-    <Compile Include="CopyStrategy\OverrideIfNewer.cs" />
+    <Compile Include="Actions\CopyStrategy\CopyAttribute.cs" />
+    <Compile Include="Actions\CopyStrategy\OverrideAlways.cs" />
+    <Compile Include="Actions\CopyStrategy\OverrideIfNewer.cs" />
     <Compile Include="Modes\BackupMode.cs" />
     <Compile Include="Modes\CopyStrategyMode.cs" />
+    <Compile Include="Modes\RedundantItemsMode.cs" />
     <Compile Include="Tools\ActionDescription.cs" />
     <Compile Include="Tools\ReflectionTools.cs" />
+    <Compile Include="Actions\RedundantItems\.RedundantItemsBase.cs" />
     <None Include="App.config" />
-    <Compile Include="CopyStrategy\.CopyStrategyBase.cs" />
+    <Compile Include="Actions\CopyStrategy\.CopyStrategyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionList.cs" />
-    <Compile Include="Actions\CopyFiles.cs" />
-    <Compile Include="Actions\CopyFilesRecursive.cs" />
-    <Compile Include="Actions\Empty.cs" />
+    <Compile Include="Actions\BackupProcessing\CopyFiles.cs" />
+    <Compile Include="Actions\BackupProcessing\CopyFilesRecursive.cs" />
+    <Compile Include="Actions\BackupProcessing\Empty.cs" />
     <Compile Include="Backup.cs" />
   </ItemGroup>
   <ItemGroup>

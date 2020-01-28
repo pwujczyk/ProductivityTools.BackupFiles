@@ -11,5 +11,6 @@ namespace ProductivityTools.BackupFiles.Logic
     {
         public BackupMode Mode { get; set; }
         public CopyStrategyMode CopyStrategy { get; set; }
+        public RedundantItemsMode RedundantItems { get; set; }
     }
 }

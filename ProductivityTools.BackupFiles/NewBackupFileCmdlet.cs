@@ -20,7 +20,6 @@ namespace ProductivityTools.BackupFiles
             string path = CurrentProviderLocation("FileSystem").ProviderPath;
             new BackupFile().CreateBackupFile(path);
             base.ProcessRecord();
-
         }
     }
 }

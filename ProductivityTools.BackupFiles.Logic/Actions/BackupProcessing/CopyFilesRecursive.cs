@@ -16,7 +16,9 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
 
         public override void Process(string masterSourcePath, string masterDestinationPath, string directory)
         {
+            
             ProcessFilesInDirectory(masterSourcePath, masterDestinationPath, directory);
+            base.ManageRedundantItems(masterSourcePath, masterDestinationPath, directory);
         }
 
         private void ProcessFilesInDirectory(string masterSourcePath, string masterDestinationPath, string directory)
