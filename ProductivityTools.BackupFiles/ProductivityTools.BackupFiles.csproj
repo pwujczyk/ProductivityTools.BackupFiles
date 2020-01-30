@@ -58,6 +58,10 @@
       <Project>{660E8591-C194-46B6-9B04-3BACAEBDBAB5}</Project>
       <Name>ProductivityTools.BackupFiles.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ProductivityTools.PSBackupFiles.Verbose\ProductivityTools.PSBackupFiles.Verbose.csproj">
+      <Project>{25c90eea-1370-45e2-a507-b8e2a916b015}</Project>
+      <Name>ProductivityTools.PSBackupFiles.Verbose</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

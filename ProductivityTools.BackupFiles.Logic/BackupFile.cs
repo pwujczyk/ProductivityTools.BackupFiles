@@ -16,6 +16,8 @@ namespace ProductivityTools.BackupFiles.Logic
         private string NodeNameBackup = "Backup";
         private string NodeNameMode = "Mode";
         private string NodeNameCopyStrategy = "CopyStrategy";
+        private string NodeRedundantItems = "RedundantItems";
+        
 
         public void CreateBackupFile(string directory)
         {
@@ -48,7 +50,7 @@ namespace ProductivityTools.BackupFiles.Logic
                     mainNode.Add(comment);
                 }
 
-                var modeElement2 = new XElement(property.Name, "notDefined");
+                var modeElement2 = new XElement(property.Name, "NotDefined");
                 mainNode.Add(modeElement2);
 
             }
@@ -103,10 +105,9 @@ namespace ProductivityTools.BackupFiles.Logic
             else
             {
                 XDocument xdoc = XDocument.Load(x);
-                var mode=ParseEnum<BackupMode>(xdoc, NodeNameMode);
-                var copyStrategy = ParseEnum<CopyStrategyMode>(xdoc, NodeNameCopyStrategy);
-                result.Mode = mode;
-                result.CopyStrategy = copyStrategy;
+                result.Mode = ParseEnum<BackupMode>(xdoc, NodeNameMode); 
+                result.CopyStrategy = ParseEnum<CopyStrategyMode>(xdoc, NodeNameCopyStrategy); 
+                result.RedundantItems= ParseEnum<RedundantItemsMode>(xdoc, NodeRedundantItems);
 
                 //string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
                 //                     select mode.Value).SingleOrDefault();

@@ -1,4 +1,5 @@
 ﻿using ProductivityTools.BackupFiles.Logic.Actions;
+using ProductivityTools.PSBackupFiles.Verbose;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,16 +23,22 @@ namespace ProductivityTools.BackupFiles.Logic
             this.MasterDestinationPath = masterDestinationPath;
         }
 
-        public void FindBackupDirectories()
+        public void PerformBackup()
         {
-            FindBackupDirectories(this.MasterSourcePath, 0);
+            ValidateDestinationDirectory();
+            ProcessDirectories(this.MasterSourcePath, 0);
         }
 
-        private void FindBackupDirectories(string directory, int depth)
+        private void ValidateDestinationDirectory()
+        {
+            System.IO.Directory.CreateDirectory(MasterDestinationPath);
+        }
+
+        private void ProcessDirectories(string directory, int depth)
         {
             if (depth < 4)
             {
-                Console.WriteLine($"Looking for powershellconfig in {directory}");
+                VerboseHelper.WriteVerboseStatic($"Looking for powershellconfig in {directory}");
             }
             if (directory.StartsWith(this.MasterDestinationPath, StringComparison.OrdinalIgnoreCase))
             {
@@ -52,11 +59,7 @@ namespace ProductivityTools.BackupFiles.Logic
 
         private void ProcessDirectory(string directory, int depth)
         {
-            //pw: move it to invoke
-            if (ActionList.Contains(directory))
-            {
-                ActionList.InvokeForPath(this.MasterSourcePath, this.MasterDestinationPath, directory);
-            }
+            ActionList.InvokeForPath(this.MasterSourcePath, this.MasterDestinationPath, directory);
         }
 
         private void GetDirectories(string directory, int depth)
@@ -64,7 +67,7 @@ namespace ProductivityTools.BackupFiles.Logic
             string[] filePaths = Directory.GetDirectories(directory, "*", SearchOption.TopDirectoryOnly);
             foreach (var filePath in filePaths)
             {
-                FindBackupDirectories(filePath, depth + 1);
+                ProcessDirectories(filePath, depth + 1);
             }
         }
 

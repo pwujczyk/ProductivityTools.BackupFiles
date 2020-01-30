@@ -17,7 +17,7 @@ namespace ProductivityTools.BackupFiles.Logic
             this.CurrentWork.Add(key, backupConfig);
         }
 
-        public bool Contains(string path)
+        private bool Contains(string path)
         {
             foreach (var item in this.CurrentWork)
             {
@@ -31,18 +31,21 @@ namespace ProductivityTools.BackupFiles.Logic
 
         public void InvokeForPath(string masterSourcePath, string masterDestinationPath, string directory)
         {
-            var workOrdered = this.CurrentWork.OrderByDescending(x => x.Key.Length);
-            foreach (var item in workOrdered)
+            if (Contains(directory))
             {
-                if (directory.StartsWith(item.Key))
+                var workOrdered = this.CurrentWork.OrderByDescending(x => x.Key.Length);
+                foreach (var item in workOrdered)
                 {
-                    //improve this
-                    BackupWorker worker = new BackupWorker(masterSourcePath, masterDestinationPath);
-                    worker.Process(directory,item.Value);
+                    if (directory.StartsWith(item.Key))
+                    {
+                        //improve this
+                        BackupWorker worker = new BackupWorker(masterSourcePath, masterDestinationPath);
+                        worker.Process(directory, item.Value);
 
 
-                    //item.Value.Mode.Process(masterSourcePath, masterDestinationPath, directory);
-                    return;
+                        //item.Value.Mode.Process(masterSourcePath, masterDestinationPath, directory);
+                        return;
+                    }
                 }
             }
         }
