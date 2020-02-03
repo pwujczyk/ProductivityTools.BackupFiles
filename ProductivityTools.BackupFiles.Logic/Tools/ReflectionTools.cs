@@ -75,6 +75,20 @@ namespace ProductivityTools.BackupFiles.Logic
             return value.ToString();
         }
 
+        public static bool GetDefault<T>(T value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DefaultAttribute[] attributes = fi.GetCustomAttributes(typeof(DefaultAttribute), false) as DefaultAttribute[];
+
+            if (attributes != null && attributes.Any())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static string GetPropertyDescription(this PropertyInfo that)
         {
             var x = that.PropertyType.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];

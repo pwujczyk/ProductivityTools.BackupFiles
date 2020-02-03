@@ -24,7 +24,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
 
         private void ProcessFilesInDirectory(string masterSourcePath, string masterDestinationPath, string directory)
         {
-            VerboseHelper.WriteVerboseStatic($"Processing directory {directory}");
+            VerboseHelper.WriteVerbose(VerbosityLevel.Detailed, $"Processing directory {directory}");
             string[] filePaths = Directory.GetFiles(directory);
             string endPath = directory.Substring(masterSourcePath.Length);
             var destination = Path.Combine(masterDestinationPath, endPath);
@@ -36,7 +36,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
             {
                 FileInfo f = new FileInfo(file);
                 var fileDestination = Path.Combine(destination, f.Name);
-                VerboseHelper.WriteVerboseStatic($"Copying file from {file} to {fileDestination}");
+                VerboseHelper.WriteVerbose(VerbosityLevel.Detailed, $"Copying file from {file} to {fileDestination}");
                 copyStrategy.Copy(file, fileDestination);
             }
         }

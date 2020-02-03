@@ -1,5 +1,6 @@
 ﻿using ProductivityTools.BackupFiles.Logic.Actions;
 using ProductivityTools.BackupFiles.Logic.CopyStrategy;
+using ProductivityTools.BackupFiles.Logic.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +30,11 @@ namespace ProductivityTools.BackupFiles.Logic
             return false;
         }
 
-        public void InvokeForPath(string masterSourcePath, string masterDestinationPath, string directory)
+        public void InvokeForPath(string masterSourcePath, string masterDestinationPath, string directory, int depth)
         {
             if (Contains(directory))
             {
+                WriteVerbose.Write(depth, $"Processing directory {directory}");
                 var workOrdered = this.CurrentWork.OrderByDescending(x => x.Key.Length);
                 foreach (var item in workOrdered)
                 {
@@ -47,6 +49,14 @@ namespace ProductivityTools.BackupFiles.Logic
                         return;
                     }
                 }
+            }
+        }
+
+        public IEnumerable<string> BackupFiles
+        {
+            get
+            {
+                return this.CurrentWork.Select(x => x.Key);
             }
         }
     }

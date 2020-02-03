@@ -43,14 +43,27 @@ namespace ProductivityTools.BackupFiles.Logic
                 mainNode.Add(comment);
 
                 var enums = property.PropertyType.GetEnumValues();
+                string defaultValue = string.Empty;
                 foreach (var @enum in enums)
                 {
                     var s = ReflectionTools.GetEnumDescription(@enum);
-                    comment = new XComment($"{@enum} - {s}");
+                    
+
+                    if (ReflectionTools.GetDefault(@enum))
+                    {
+                        defaultValue = @enum.ToString();
+                        comment = new XComment($"{@enum} - {s} [Default]");
+                    }
+                    else
+                    {
+                        comment = new XComment($"{@enum} - {s}");
+                    }
+
+                    
                     mainNode.Add(comment);
                 }
 
-                var modeElement2 = new XElement(property.Name, "NotDefined");
+                var modeElement2 = new XElement(property.Name, defaultValue);
                 mainNode.Add(modeElement2);
 
             }
@@ -89,7 +102,8 @@ namespace ProductivityTools.BackupFiles.Logic
                                  select mode.Value).SingleOrDefault();
             if (!string.IsNullOrEmpty(backupMode))
             {
-                result = (T)Enum.Parse(typeof(T), backupMode);
+                    result = (T)Enum.Parse(typeof(T), backupMode);
+                
             }
             return result;
         }
@@ -104,11 +118,19 @@ namespace ProductivityTools.BackupFiles.Logic
             }
             else
             {
-                XDocument xdoc = XDocument.Load(x);
-                result.Mode = ParseEnum<BackupMode>(xdoc, NodeNameMode); 
-                result.CopyStrategy = ParseEnum<CopyStrategyMode>(xdoc, NodeNameCopyStrategy); 
-                result.RedundantItems= ParseEnum<RedundantItemsMode>(xdoc, NodeRedundantItems);
+                try
+                {
+                    XDocument xdoc = XDocument.Load(x);
+                    result.Mode = ParseEnum<BackupMode>(xdoc, NodeNameMode);
+                    result.CopyStrategy = ParseEnum<CopyStrategyMode>(xdoc, NodeNameCopyStrategy);
+                    result.RedundantItems = ParseEnum<RedundantItemsMode>(xdoc, NodeRedundantItems);
 
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"File {x} cound not be parsed correctly");
+                }
+                
                 //string backupMode = (from mode in xdoc.Descendants(NodeNameMode)
                 //                     select mode.Value).SingleOrDefault();
                 //if (!string.IsNullOrEmpty(backupMode))

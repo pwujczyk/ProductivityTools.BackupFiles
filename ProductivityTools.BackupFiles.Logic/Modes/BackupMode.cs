@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductivityTools.BackupFiles.Logic.Tools;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace ProductivityTools.BackupFiles.Logic
     {
         NotDefined,
         DoNothing,
+        [Default]
         [Description("It will copy files and directories recursively, until it will find another file which will override action")]
         CopyRecursively,
         CopyJustFiles

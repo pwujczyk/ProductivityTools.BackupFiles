@@ -11,7 +11,7 @@ using ProductivityTools.PSBackupFiles.Verbose;
 namespace ProductivityTools.BackupFiles
 {
     [Cmdlet(VerbsCommon.New, "Backup")]
-    public class BackupFilesCmdlet : ProductivityTools.PSCmdlet.PSCmdletPT
+    public class NewBackupCmdlet : ProductivityTools.PSCmdlet.PSCmdletPT
     {
         [Parameter(Position = 0)]
         public string Source { get; set; }
@@ -19,7 +19,10 @@ namespace ProductivityTools.BackupFiles
         [Parameter(Position = 1,Mandatory =true)]
         public string Destination { get; set; }
 
-        public BackupFilesCmdlet()
+        [Parameter(Position = 2)]
+        public VerbosityLevel VerbosityLevel { get; set; }
+
+        public NewBackupCmdlet()
         {
 
         }
@@ -27,7 +30,8 @@ namespace ProductivityTools.BackupFiles
         protected override void ProcessRecord()
         {
             VerboseHelper.SetVerbose(this.MyInvocation.BoundParameters.ContainsKey("Verbose"));
-            VerboseHelper.WriteVerboseStatic = WriteVerbose;
+            VerboseHelper.SetVerbosityOutput(WriteVerbose);
+            VerboseHelper.Level = VerbosityLevel;
 
             if (string.IsNullOrEmpty(Source))
             {

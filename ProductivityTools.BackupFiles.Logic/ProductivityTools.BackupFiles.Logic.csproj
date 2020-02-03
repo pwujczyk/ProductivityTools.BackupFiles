@@ -50,8 +50,10 @@
     <Compile Include="Modes\CopyStrategyMode.cs" />
     <Compile Include="Modes\RedundantItemsMode.cs" />
     <Compile Include="Tools\ActionDescription.cs" />
+    <Compile Include="Tools\DefaultAttribute.cs" />
     <Compile Include="Tools\ReflectionTools.cs" />
     <Compile Include="Actions\RedundantItems\.RedundantItemsBase.cs" />
+    <Compile Include="Tools\WriteVerbose.cs" />
     <None Include="App.config" />
     <Compile Include="Actions\CopyStrategy\.CopyStrategyBase.cs" />
   </ItemGroup>

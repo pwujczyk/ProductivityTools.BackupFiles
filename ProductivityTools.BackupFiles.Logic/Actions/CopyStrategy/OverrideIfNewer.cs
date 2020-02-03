@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProductivityTools.BackupFiles.Logic.CopyStrategy
 {
-    [Action((int)CopyStrategyMode.OvverideIfModyficationDateIsNewer)]
+    [Action((int)CopyStrategyMode.OverideIfModificationDateIsNewer)]
     class OverrideIfNewer : CopyStrategyBase
     {
         public override void Copy(string source, string destination)

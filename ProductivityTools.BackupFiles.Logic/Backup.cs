@@ -1,4 +1,5 @@
 ﻿using ProductivityTools.BackupFiles.Logic.Actions;
+using ProductivityTools.BackupFiles.Logic.Tools;
 using ProductivityTools.PSBackupFiles.Verbose;
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,26 @@ namespace ProductivityTools.BackupFiles.Logic
         ActionList ActionList = new ActionList();
         BackupFile BackupFile = new BackupFile();
 
-        public Backup(string masterSourcePath, string masterDestinationPath)
+        public Backup(string masterSourcePath)
         {
             this.MasterSourcePath = masterSourcePath;
+        }
+
+        public Backup(string masterSourcePath, string masterDestinationPath) : this(masterSourcePath)
+        {
             this.MasterDestinationPath = masterDestinationPath;
         }
 
         public void PerformBackup()
         {
             ValidateDestinationDirectory();
-            ProcessDirectories(this.MasterSourcePath, 0);
+            ProcessDirectories(this.MasterSourcePath, 0, true);
+        }
+
+        public IEnumerable<string> FindBackupDirectories()
+        {
+            ProcessDirectories(this.MasterSourcePath, 0, false);
+            return this.ActionList.BackupFiles;
         }
 
         private void ValidateDestinationDirectory()
@@ -34,13 +45,11 @@ namespace ProductivityTools.BackupFiles.Logic
             System.IO.Directory.CreateDirectory(MasterDestinationPath);
         }
 
-        private void ProcessDirectories(string directory, int depth)
+        private void ProcessDirectories(string directory, int depth, bool process)
         {
-            if (depth < 4)
-            {
-                VerboseHelper.WriteVerboseStatic($"Looking for powershellconfig in {directory}");
-            }
-            if (directory.StartsWith(this.MasterDestinationPath, StringComparison.OrdinalIgnoreCase))
+            WriteVerbose.Write(depth, $"Looking for powershellconfig in {directory}");
+
+            if (process && directory.StartsWith(this.MasterDestinationPath, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
@@ -52,22 +61,25 @@ namespace ProductivityTools.BackupFiles.Logic
                 {
                     ActionList.Add(directory, config);
                 }
-                ProcessDirectory(directory, depth);
-                GetDirectories(directory, depth);
+                if (process)
+                {
+                    ProcessDirectory(directory, depth);
+                }
+                GetDirectories(directory, depth, process);
             }
         }
 
         private void ProcessDirectory(string directory, int depth)
         {
-            ActionList.InvokeForPath(this.MasterSourcePath, this.MasterDestinationPath, directory);
+            ActionList.InvokeForPath(this.MasterSourcePath, this.MasterDestinationPath, directory, depth);
         }
 
-        private void GetDirectories(string directory, int depth)
+        private void GetDirectories(string directory, int depth, bool process)
         {
             string[] filePaths = Directory.GetDirectories(directory, "*", SearchOption.TopDirectoryOnly);
             foreach (var filePath in filePaths)
             {
-                ProcessDirectories(filePath, depth + 1);
+                ProcessDirectories(filePath, depth + 1, process);
             }
         }
 

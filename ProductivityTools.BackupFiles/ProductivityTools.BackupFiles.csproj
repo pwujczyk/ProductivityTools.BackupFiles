@@ -50,7 +50,8 @@
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackupFilesCmdlet.cs" />
+    <Compile Include="NewBackupCmdlet.cs" />
+    <Compile Include="FindBackupFilesCmdlet.cs" />
     <Compile Include="NewBackupFileCmdlet.cs" />
   </ItemGroup>
   <ItemGroup>
