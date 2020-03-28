@@ -11,7 +11,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions.RedundantItems
     {
         public override void Process(string masterSourcePath, string masterDestinationPath, string directory)
         {
-            string endPath = directory.Substring(masterSourcePath.Length);
+            string endPath = directory.Substring(masterSourcePath.Length).Trim('\\');
             string destination = Path.Combine(masterDestinationPath, endPath);
             // string destinationDirectory = Path.GetDirectoryName(destination);
 

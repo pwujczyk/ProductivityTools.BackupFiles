@@ -25,7 +25,7 @@ namespace ProductivityTools.BackupFiles.Logic.Actions
         {
             VerboseHelper.WriteVerbose(VerbosityLevel.Detailed, $"Processing directory {directory}");
             string[] filePaths = Directory.GetFiles(directory);
-            string endPath = directory.Substring(masterSourcePath.Length);
+            string endPath = directory.Substring(masterSourcePath.Length).Trim('\\');
             var destination = Path.Combine(masterDestinationPath, endPath);
             if (endPath.Length > 0)
             {
