@@ -24,7 +24,16 @@ namespace ProductivityTools.BackupFiles.Logic.CopyStrategy
             }
             else
             {
-                File.Copy(source, destination);
+                try
+                {
+                    File.Copy(source, destination);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.Write(ex.ToString());
+                }
+                
             }
         }
     }
