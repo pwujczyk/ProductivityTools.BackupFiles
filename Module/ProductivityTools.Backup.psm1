@@ -52,7 +52,7 @@ function Backup-Folders {
 
 }
 
-function Backup-WithMasterConfiguration {
+function Backup-FoldersWithMasterConfiguration {
     [CmdletBinding()]
     param ()
 
@@ -69,5 +69,32 @@ function Backup-WithMasterConfiguration {
     }
 }
 
+function Create-BackupFileIndicator{
+   [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$false, HelpMessage="Specify the directory path where the .backup.pt file will be created. Defaults to the current directory.")]
+        [string]
+        $Path = (Get-Location).Path
+    )
+
+    $fileName = ".backup.pt"
+    $filePath = Join-Path -Path $Path -ChildPath $fileName
+    $fileContent = "This is the file indicator that says that this directory should be taken into account during the backup operation performed by the ProductivityTools.Backup module"
+
+    try {
+        Set-Content -Path $filePath -Value $fileContent -ErrorAction Stop
+        Write-Verbose "[Backup Module][Create-BackupFileIndicator] Successfully created $filePath"
+        Write-Output "Successfully created $filePath"
+    }
+    catch {
+        Write-Error "[Backup Module][Create-BackupFileIndicator] Failed to create $filePath. Error: $($_.Exception.Message)"
+    }
+
+}
+
+Export-ModuleMember Backup-Folders
+Export-ModuleMember Backup-FoldersWithMasterConfiguration 
+Export-ModuleMember Create-BackupFileIndicator
+
 #BackupFolders -SourceDirectory "D:\Trash\x1" -DestinationDirectory "D:\Trash\x2" -Verbose
-Backup-WithMasterConfiguration -Verbose
+#Backup-WithMasterConfiguration -Verbose
