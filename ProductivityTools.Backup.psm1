@@ -1,11 +1,8 @@
-<<<<<<< HEAD
-=======
 function Get-BackupIndicatorFileName {
     # Internal helper function to get the standard backup indicator file name.
     return ".backup.pt"
 }
 
->>>>>>> detached
 function BackupDirectory {
     param (
         [Parameter()]
@@ -41,11 +38,7 @@ function Backup-Folders {
     Write-Output $mainLevelDirectories
 
     foreach ($mainLevelDirectory in $mainLevelDirectories) {
-<<<<<<< HEAD
-        $fileIndicator=".backup.pt"
-=======
         $fileIndicator = Get-BackupIndicatorFileName
->>>>>>> detached
         $diFullrName = $mainLevelDirectory.FullName
         $dirName = $mainLevelDirectory.Name
         $backupDir = Test-Path "$diFullrName\$fileIndicator"
@@ -54,11 +47,7 @@ function Backup-Folders {
             BackupDirectory -SourceDirectory $diFullrName -DestinationDirectory "$DestinationDirectory\$dirName"
         }
         else {
-<<<<<<< HEAD
-             Write-Verbose "[Backup Module][Backup-Folders] fileIndicator was not found in the directory"
-=======
             Write-Verbose "[Backup Module][Backup-Folders] fileIndicator was not found in the directory"
->>>>>>> detached
 
         }
 
@@ -85,33 +74,20 @@ function Backup-FoldersWithMasterConfiguration {
     }
 }
 
-<<<<<<< HEAD
-function Create-BackupFileIndicator{
-   [CmdletBinding()]
-    param (
-        [Parameter(Mandatory=$false, HelpMessage="Specify the directory path where the .backup.pt file will be created. Defaults to the current directory.")]
-=======
 function Create-BackupFileIndicator {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false, HelpMessage = "Specify the directory path where the .backup.pt file will be created. Defaults to the current directory.")]
->>>>>>> detached
         [string]
         $Path = (Get-Location).Path
     )
 
-<<<<<<< HEAD
-    $fileName = ".backup.pt"
-    $filePath = Join-Path -Path $Path -ChildPath $fileName
-    $fileContent = "This is the file indicator that says that this directory should be taken into account during the backup operation performed by the ProductivityTools.Backup module"
-=======
     $fileName = Get-BackupIndicatorFileName
     $filePath = Join-Path -Path $Path -ChildPath $fileName
     $fileContent = "#DestinationPath:c:\trash
 #This is the file indicator that says that this directory should be taken into account during the backup operation performed by the ProductivityTools.Backup module\
 #If you uncomment the first line you could use Backup-Directory cmdlet
     "
->>>>>>> detached
 
     try {
         Set-Content -Path $filePath -Value $fileContent -ErrorAction Stop
@@ -124,11 +100,6 @@ function Create-BackupFileIndicator {
 
 }
 
-<<<<<<< HEAD
-Export-ModuleMember Backup-Folders
-Export-ModuleMember Backup-FoldersWithMasterConfiguration 
-Export-ModuleMember Create-BackupFileIndicator
-=======
 function Backup-Directory {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param (
@@ -185,7 +156,6 @@ Export-ModuleMember Backup-Folders
 Export-ModuleMember Backup-FoldersWithMasterConfiguration 
 Export-ModuleMember Create-BackupFileIndicator
 Export-ModuleMember Backup-Directory
->>>>>>> detached
 
 #BackupFolders -SourceDirectory "D:\Trash\x1" -DestinationDirectory "D:\Trash\x2" -Verbose
 #Backup-WithMasterConfiguration -Verbose

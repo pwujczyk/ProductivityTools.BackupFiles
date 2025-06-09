@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-/copy:DAT: means you will copy the source folder to destination folder with D (Data), A (Attributes), T (Time stamps), and you could modify these copied files. If you don’t want to modify these folders and files, you could replace /copy:DAT to /copyall or /copy:DATSOU.
-
-/mt: Creates multi-threaded copies with 8 threads.
-
-=======
 # ProductivityTools.Backup PowerShell Module
 
 This PowerShell module provides a set of functions to facilitate directory backups, primarily using Robocopy for the underlying file transfer operations. It allows for targeted backups based on indicator files and master configurations.
@@ -175,5 +169,4 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 
 /mt: Creates multi-threaded copies with 8 threads.
 
->>>>>>> detached
 /V - verbose
