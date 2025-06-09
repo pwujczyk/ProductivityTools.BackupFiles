@@ -1,3 +1,8 @@
+function Get-BackupIndicatorFileName {
+    # Internal helper function to get the standard backup indicator file name.
+    return ".backup.pt"
+}
+
 function BackupDirectory {
     param (
         [Parameter()]
@@ -33,7 +38,7 @@ function Backup-Folders {
     Write-Output $mainLevelDirectories
 
     foreach ($mainLevelDirectory in $mainLevelDirectories) {
-        $fileIndicator=".backup.pt"
+        $fileIndicator = Get-BackupIndicatorFileName
         $diFullrName = $mainLevelDirectory.FullName
         $dirName = $mainLevelDirectory.Name
         $backupDir = Test-Path "$diFullrName\$fileIndicator"
@@ -42,7 +47,7 @@ function Backup-Folders {
             BackupDirectory -SourceDirectory $diFullrName -DestinationDirectory "$DestinationDirectory\$dirName"
         }
         else {
-             Write-Verbose "[Backup Module][Backup-Folders] fileIndicator was not found in the directory"
+            Write-Verbose "[Backup Module][Backup-Folders] fileIndicator was not found in the directory"
 
         }
 
@@ -69,17 +74,20 @@ function Backup-FoldersWithMasterConfiguration {
     }
 }
 
-function Create-BackupFileIndicator{
-   [CmdletBinding()]
+function Create-BackupFileIndicator {
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false, HelpMessage="Specify the directory path where the .backup.pt file will be created. Defaults to the current directory.")]
+        [Parameter(Mandatory = $false, HelpMessage = "Specify the directory path where the .backup.pt file will be created. Defaults to the current directory.")]
         [string]
         $Path = (Get-Location).Path
     )
 
-    $fileName = ".backup.pt"
+    $fileName = Get-BackupIndicatorFileName
     $filePath = Join-Path -Path $Path -ChildPath $fileName
-    $fileContent = "This is the file indicator that says that this directory should be taken into account during the backup operation performed by the ProductivityTools.Backup module"
+    $fileContent = "#DestinationPath:c:\trash
+#This is the file indicator that says that this directory should be taken into account during the backup operation performed by the ProductivityTools.Backup module\
+#If you uncomment the first line you could use Backup-Directory cmdlet
+    "
 
     try {
         Set-Content -Path $filePath -Value $fileContent -ErrorAction Stop
@@ -92,9 +100,62 @@ function Create-BackupFileIndicator{
 
 }
 
+function Backup-Directory {
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    param (
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Specify the source directory path containing the .backup.pt file. Defaults to the current directory.")]
+        [string]
+        $Path = (Get-Location).Path
+    )
+
+    Write-Verbose "[Backup Module][Backup-Directory] Attempting to backup directory: $Path"
+
+    $indicatorFileName = Get-BackupIndicatorFileName
+    $indicatorFilePath = Join-Path -Path $Path -ChildPath $indicatorFileName
+
+    if (-not (Test-Path $indicatorFilePath -PathType Leaf)) {
+        Write-Warning "[Backup Module][Backup-Directory] Indicator file '$indicatorFileName' not found in '$Path'."
+        return
+    }
+
+    Write-Verbose "[Backup Module][Backup-Directory] Found indicator file: $indicatorFilePath"
+
+    # Read only the first line for efficiency
+    $firstLine = Get-Content -Path $indicatorFilePath -TotalCount 1 | Select-Object -First 1
+
+    if ($null -eq $firstLine) {
+        Write-Warning "[Backup Module][Backup-Directory] Indicator file '$indicatorFilePath' is empty."
+        return
+    }
+
+    $destinationPathKey = "DestinationPath:"
+    # Check if the line starts with "DestinationPath:" (case-insensitive) and is not commented out
+    if ($firstLine.TrimStart().StartsWith($destinationPathKey) -eq $true) {
+        # Split by the first colon only, then trim
+        $destinationDir = ($firstLine -split ':', 2)[1].Trim()
+
+        if ([string]::IsNullOrWhiteSpace($destinationDir)) {
+            Write-Warning "[Backup Module][Backup-Directory] '$destinationPathKey' found in '$indicatorFilePath', but no destination path is specified after the colon."
+            return
+        }
+
+        Write-Verbose "[Backup Module][Backup-Directory] Parsed DestinationDirectory: '$destinationDir' from '$indicatorFilePath'"
+
+        if ($PSCmdlet.ShouldProcess("source '$Path' to destination '$destinationDir'", "Backup Directory (using .backup.pt configuration)")) {
+            BackupDirectory -SourceDirectory $Path -DestinationDirectory $destinationDir # Call the internal function
+            Write-Output "[Backup Module][Backup-Directory] Backup initiated for '$Path' to '$destinationDir'."
+        }
+    }
+    else {
+        Write-Verbose "[Backup Module][Backup-Directory] First line of '$indicatorFilePath' does not contain an uncommented and valid '$destinationPathKey' entry."
+        Write-Warning "[Backup Module][Backup-Directory] No uncommented '$destinationPathKey' found in '$indicatorFilePath'. To enable backup for this directory using Backup-Directory, edit the first line of '$indicatorFilePath' to be like 'DestinationPath:your\target\path'."
+    }
+}
+
 Export-ModuleMember Backup-Folders
 Export-ModuleMember Backup-FoldersWithMasterConfiguration 
 Export-ModuleMember Create-BackupFileIndicator
+Export-ModuleMember Backup-Directory
 
 #BackupFolders -SourceDirectory "D:\Trash\x1" -DestinationDirectory "D:\Trash\x2" -Verbose
 #Backup-WithMasterConfiguration -Verbose

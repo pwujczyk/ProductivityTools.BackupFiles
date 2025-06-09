@@ -1,0 +1,4 @@
+DestinationPath:d:\trash
+#This is the file indicator that says that this directory should be taken into account during the backup operation performed by the ProductivityTools.Backup module\
+#If you uncomment the first line you could use Backup-Directory cmdlet
+    
