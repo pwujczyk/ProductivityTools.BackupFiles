@@ -20,6 +20,36 @@ function BackupDirectory {
 
 }
 
+function Remove-EmptyDestinatinonFolders {
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]
+        $DestinationDirectory
+    )
+
+    # Get all immediate subdirectories in the destination
+    $subDirectories = Get-ChildItem -Path $DestinationDirectory -Directory -ErrorAction SilentlyContinue
+
+    foreach ($dir in $subDirectories) {
+        # Get all items in the current subdirectory (files and folders), including hidden ones
+        $items = Get-ChildItem -Path $dir.FullName -Force
+
+        # Check if there is exactly one item and it's the backup indicator file
+        if ($items.Count -eq 1) {
+            $item = $items[0]
+            # Ensure it's a file and its name matches the backup indicator file name
+            if (-not $item.PSIsContainer -and $item.Name -eq (Get-BackupIndicatorFileName)) {
+                Write-Verbose "[Backup Module][Remove-EmptyDestinatinoFolders] Preparing to remove empty backup folder: $($dir.FullName)"
+                if ($PSCmdlet.ShouldProcess("'$($dir.FullName)' because it only contains a backup indicator file.", "Remove Directory")) {
+                    Remove-Item -Path $dir.FullName -Recurse -Force
+                    Write-Verbose "[Backup Module][Remove-EmptyDestinatinoFolders] Removed folder: $($dir.FullName)"
+                }
+            }
+        }
+    }
+}
+
 function Backup-Folders {
     [CmdletBinding()]
     param (
@@ -72,6 +102,7 @@ function Backup-FoldersWithMasterConfiguration {
         Backup-Folders -SourceDirectory $source -DestinationDirectory $destination
         
     }
+    Remove-EmptyDestinatinonFolders -DestinationDirectory $destination
 }
 
 function Create-BackupFileIndicator {
@@ -156,6 +187,7 @@ Export-ModuleMember Backup-Folders
 Export-ModuleMember Backup-FoldersWithMasterConfiguration 
 Export-ModuleMember Create-BackupFileIndicator
 Export-ModuleMember Backup-Directory
+Export-ModuleMember Remove-EmptyDestinatinonFolders
 
 #BackupFolders -SourceDirectory "D:\Trash\x1" -DestinationDirectory "D:\Trash\x2" -Verbose
 #Backup-WithMasterConfiguration -Verbose
